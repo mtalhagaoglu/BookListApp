@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Share,
 } from 'react-native'
 import Bookmark from '../Assets/Images/bookmark.svg'
 import { useDispatch } from 'react-redux'
@@ -16,12 +17,15 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu'
-import { removeBook } from '@/Store/Library'
+import { removeBook, addFavori, removeFavori } from '@/Store/Library'
+import Option from '@/Assets/Images/option.svg'
+import { useLibrary } from '@/Hooks'
 
 export default Book = memo(params => {
   const dispatch = useDispatch()
-
+  const { favorites, categories } = useLibrary()
   const {
+    id,
     title,
     author,
     page,
@@ -29,12 +33,34 @@ export default Book = memo(params => {
     score,
     status_id,
     note,
-    description,
+    about,
     progress,
     cover_image,
   } = params
-  const [bookmark, setBookmark] = useState(false)
+
+  const [bookmark, setBookmark] = useState(favorites.includes(id))
   const progress_percentage = parseInt((progress / page) * 100)
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Bu kitabı okudun mu?\n\n${title}\nYazar: ${author}\nKategori: ${
+          categories.find(a => a.id === category_id).name
+        }\n\nKonusu:\n${about}`,
+      })
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message)
+    }
+  }
 
   return (
     <Pressable
@@ -49,16 +75,20 @@ export default Book = memo(params => {
       />
       <View style={styles.details}>
         <View style={styles.bottomDetails}>
-          <Text style={styles.author}>{author}</Text>
+          <Text style={styles.author}>
+            {author} | {categories.find(a => a.id === category_id).name}
+          </Text>
           <Menu>
-            <MenuTrigger text=" ••• " />
+            <MenuTrigger>
+              <Option width={20} />
+            </MenuTrigger>
 
             <MenuOptions>
               <MenuOption
                 onSelect={() => navigate('BookForm', { data: params })}
                 text="Düzenle"
               />
-              <MenuOption text="Paylaş" />
+              <MenuOption onSelect={handleShare} text="Paylaş" />
               <MenuOption
                 onSelect={() => dispatch(removeBook({ bookId: params.id }))}
                 text="Kaldır"
@@ -70,9 +100,19 @@ export default Book = memo(params => {
         <Text numberOfLines={1} style={styles.title}>
           {title}
         </Text>
+
         <View style={styles.bottomDetails}>
           <Text style={styles.progress}>{progress_percentage}%</Text>
-          <TouchableOpacity onPress={() => setBookmark(s => !s)}>
+          <TouchableOpacity
+            onPress={() => {
+              if (bookmark) {
+                dispatch(removeFavori({ bookId: id }))
+              } else {
+                dispatch(addFavori({ bookId: id }))
+              }
+              setBookmark(s => !bookmark)
+            }}
+          >
             <Bookmark fill={bookmark ? '#e7b468' : '#c1c1c2'} width={25} />
           </TouchableOpacity>
         </View>

@@ -47,7 +47,7 @@ export default function BookDetails({ navigation, route }) {
     }
     setData({
       ...route.params.data,
-      category: categories[route.params.data.category_id - 1].name,
+      category: categories.find(a => a.id === route.params.data.category_id).name,
     })
     navigation.setOptions({
       title: '',

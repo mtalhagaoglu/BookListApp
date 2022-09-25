@@ -1,2 +1,1 @@
-export { default as useTheme } from './useTheme'
-export {default as useLibrary} from "./useLibrary"
+export { default as useLibrary } from './useLibrary'

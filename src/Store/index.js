@@ -12,18 +12,16 @@ import {
   REGISTER,
 } from 'redux-persist'
 
-import theme from './Theme'
 import library from './Library'
 
 const reducers = combineReducers({
-  theme,
   library
 })
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['theme', 'library'],
+  whitelist: ['library'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)

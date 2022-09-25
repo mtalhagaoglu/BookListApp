@@ -40,6 +40,7 @@ const HomePage = () => {
         renderItem={({ item }) => <Book {...item} />}
         keyExtractor={(item, index) => `book_${index}`}
         ListEmptyComponent={<EmptyList />}
+        initialNumToRender={10}
       />
     </SafeAreaView>
   )

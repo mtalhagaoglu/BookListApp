@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const slice = createSlice({
   name: 'library',
-  initialState: { books: [], favorites: [],categories: []},
+  initialState: { books: [], favorites: [], categories: [] },
   reducers: {
     addBook: (state, { payload: { book } }) => {
       state.books = [...state.books, book]
@@ -19,12 +19,20 @@ const slice = createSlice({
         return b
       })
     },
-    setCategories: (state,{payload: {categories}}) => {
+    setCategories: (state, { payload: { categories } }) => {
       state.categories = categories
+    },
+    addFavori: (state, { payload: { bookId } }) => {
+      if (!state.favorites.includes(bookId)) {
+        state.favorites = [...state.favorites, bookId]
+      }
+    },
+    removeFavori: (state,{payload: {bookId}}) => {
+      state.favorites = state.favorites.filter(a => a !== bookId)
     }
   },
 })
 
-export const { addBook, removeBook, editBook,setCategories} = slice.actions
+export const { addBook, removeBook, editBook, setCategories,addFavori,removeFavori } = slice.actions
 
 export default slice.reducer

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { store, persistor } from '@/Store'
 import ApplicationNavigator from '@/Navigators/Application'
-import './Translations'
+
 import { MenuProvider } from 'react-native-popup-menu'
 
 const App = () => (

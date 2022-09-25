@@ -1,8 +1,7 @@
 import React from 'react'
-import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native'
+import { SafeAreaView, StatusBar, TouchableOpacity,StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
-import { useTheme } from '@/Hooks'
 import { navigationRef } from './utils'
 import { HomePage, BookDetails, BookForm } from '@/Containers'
 import Add from '@/Assets/Images/Add.svg'
@@ -10,13 +9,10 @@ import Add from '@/Assets/Images/Add.svg'
 const Stack = createStackNavigator()
 
 const ApplicationNavigator = () => {
-  const { Layout, darkMode, NavigationTheme } = useTheme()
-  const { colors } = NavigationTheme
-
   return (
-    <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
-      <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
-        <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
+    <SafeAreaView style={[StyleSheet.absoluteFill]}>
+      <NavigationContainer ref={navigationRef}>
+        <StatusBar />
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
